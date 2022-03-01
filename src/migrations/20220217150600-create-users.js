@@ -1,36 +1,31 @@
-'use strict';
+"use strict";
 module.exports = {
   up: async (queryInterface, DataTypes) => {
-    await queryInterface.createTable('users', {
-      name: {
-        type: DataTypes.STRING,
-        allowNull:false
-
-      },
+    await queryInterface.createTable("users", {
       email: {
         type: DataTypes.STRING,
         primaryKey: true,
-        allowNull:false
+        allowNull: false,
       },
       password: {
         type: DataTypes.STRING,
-        allowNull:false
+        allowNull: false,
       },
       role: {
         type: DataTypes.STRING,
-        allowNull:false
+        allowNull: false,
       },
       createdAt: {
         allowNull: false,
-        type: DataTypes.DATE
+        type: DataTypes.DATE,
       },
       updatedAt: {
         allowNull: false,
-        type: DataTypes.DATE
-      }
+        type: DataTypes.DATE,
+      },
     });
   },
   down: async (queryInterface, DataTypes) => {
-    await queryInterface.dropTable('users');
-  }
+    await queryInterface.dropTable("users");
+  },
 };

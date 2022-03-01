@@ -2,22 +2,21 @@ require("dotenv").config();
 const router = require("express").Router();
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
-const { users } = require("./../models");
+const { User } = require("./../models");
 
 router.post("/register", async (req, res) => {
-  const { name, email, password, role } = req.body;
+  const { email, password, role } = req.body;
   const hashedPassword = await bcrypt.hash(password, 10);
   try {
-    const user = await users.create({
-      name,
+    const user = await User.create({
       email,
       password: hashedPassword,
       role,
     });
     console.log("hashedpassword", hashedPassword);
     console.log(user);
-    res.status(201).send();
-    return res.send(user);
+
+    return res.status(201).send(user);
   } catch (err) {
     console.log(err);
     return res.status(500).send(err);
@@ -26,7 +25,7 @@ router.post("/register", async (req, res) => {
 
 router.post("/login", async (req, res) => {
   const { email, password } = req.body;
-  const user = await users.findByPk(email);
+  const user = await User.findByPk(email);
   if (user == null) {
     return res.status(400).send("cannot find user");
   }
@@ -43,7 +42,8 @@ router.post("/login", async (req, res) => {
     } else {
       res.send("Unauthorised");
     }
-  } catch {
+  } catch (err) {
+    console.log(err);
     res.status(500).send();
   }
 });
