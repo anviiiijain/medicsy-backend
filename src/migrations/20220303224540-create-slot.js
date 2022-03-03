@@ -1,52 +1,30 @@
 "use strict";
 module.exports = {
   up: async (queryInterface, DataTypes) => {
-    await queryInterface.createTable("PatientDetails", {
-      patient_id: {
+    await queryInterface.createTable("Slots", {
+      slot_id: {
         type: DataTypes.UUID,
         defaultValue: DataTypes.UUIDV4,
         allowNull: false,
         primaryKey: true,
         unique: true,
       },
-      email: {
-        type: DataTypes.STRING,
-        references: {
-          model: "User",
-          key: "email",
-        },
-      },
-      name: {
-        type: DataTypes.STRING,
-        allowNull: false,
-      },
-      dob: {
+      date: {
         type: DataTypes.DATE,
         allowNull: false,
       },
-      bloodGroup: {
+      start_time: {
         type: DataTypes.STRING,
         allowNull: false,
       },
-      contact: {
+      end_time: {
         type: DataTypes.STRING,
         allowNull: false,
       },
-      emergencyContact: {
-        type: DataTypes.STRING,
+      availability: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: true,
         allowNull: false,
-      },
-      gender: {
-        type: DataTypes.STRING,
-      },
-      height: {
-        type: DataTypes.INTEGER,
-      },
-      weight: {
-        type: DataTypes.INTEGER,
-      },
-      location: {
-        type: DataTypes.STRING,
       },
       createdAt: {
         allowNull: false,
@@ -59,6 +37,6 @@ module.exports = {
     });
   },
   down: async (queryInterface, DataTypes) => {
-    await queryInterface.dropTable("PatientDetails");
+    await queryInterface.dropTable("Slots");
   },
 };

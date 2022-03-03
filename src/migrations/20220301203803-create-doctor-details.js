@@ -9,9 +9,16 @@ module.exports = {
         unique: true,
         defaultValue: DataTypes.UUIDV4,
       },
+      clinic_id: {
+        type: DataTypes.UUID,
+        allowNull: false,
+      },
       email: {
         type: DataTypes.STRING,
-        allowNull: false,
+        references: {
+          model: "User",
+          key: "email",
+        },
       },
       name: {
         type: DataTypes.STRING,

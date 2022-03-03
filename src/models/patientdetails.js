@@ -9,6 +9,12 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      this.belongsTo(models.User, {
+        foreignKey: "email",
+      });
+      this.hasMany(models.DoctorPatient, {
+        foreignKey: "patient_id",
+      });
     }
   }
   PatientDetails.init(
@@ -22,7 +28,10 @@ module.exports = (sequelize, DataTypes) => {
       },
       email: {
         type: DataTypes.STRING,
-        allowNull: false,
+        references: {
+          model: "User",
+          key: "email",
+        },
       },
       name: {
         type: DataTypes.STRING,
@@ -32,7 +41,7 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.DATE,
         allowNull: false,
       },
-      bloodGroup: {
+      blood_group: {
         type: DataTypes.STRING,
         allowNull: false,
       },
@@ -40,7 +49,7 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING,
         allowNull: false,
       },
-      emergencyContact: {
+      emergency_contact: {
         type: DataTypes.STRING,
         allowNull: false,
       },
