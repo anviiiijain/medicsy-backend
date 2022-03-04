@@ -1,7 +1,7 @@
 "use strict";
 const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
-  class DoctorPatient extends Model {
+  class PrescriptionRecord extends Model {
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
@@ -9,48 +9,41 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      this.belongsToMany(models.DoctorDetails, {
-        foreignKey: "doctor_id",
-      });
-      this.belongsToMany(models.PatientDetails, {
-        foreignKey: "patient_id",
-      });
-      this.hasMany(models.DoctorFeedback, {
+      this.belongsTo(models.DoctorPatient, {
         foreignKey: "doctor_patient_id",
       });
-      this.hasMany(models.PrescriptionRecord, {
-        foreignKey: "doctor_patient_id",
+      this.hasMany(models.PrescribedMedicine, {
+        foreignKey: "record_id",
       });
     }
   }
-  DoctorPatient.init(
+  PrescriptionRecord.init(
     {
-      doctor_patient_id: {
+      record_id: {
         type: DataTypes.UUID,
         defaultValue: DataTypes.UUIDV4,
         allowNull: false,
         primaryKey: true,
         unique: true,
       },
-      doctor_id: {
+      doctor_patient_id: {
         type: DataTypes.UUID,
         references: {
-          model: "DoctorDetails",
-          key: "doctor_id",
+          model: "DoctorPatient",
+          key: "doctor_patient_id",
         },
       },
-      patient_id: {
-        type: DataTypes.UUID,
-        references: {
-          model: "PatientDetails",
-          key: "patient_id",
-        },
+      daignosis: {
+        type: DataTypes.STRING,
+      },
+      date: {
+        type: DataTypes.DATE,
       },
     },
     {
       sequelize,
-      modelName: "DoctorPatient",
+      modelName: "PrescriptionRecord",
     }
   );
-  return DoctorPatient;
+  return PrescriptionRecord;
 };
