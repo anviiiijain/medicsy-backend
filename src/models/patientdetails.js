@@ -12,7 +12,8 @@ module.exports = (sequelize, DataTypes) => {
       this.belongsTo(models.User, {
         foreignKey: "email",
       });
-      this.hasMany(models.DoctorPatient, {
+      this.belongsToMany(models.DoctorDetails, {
+        through: "DoctorPatient",
         foreignKey: "patient_id",
       });
     }
