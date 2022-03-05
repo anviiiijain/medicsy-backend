@@ -1,7 +1,7 @@
 "use strict";
 module.exports = {
-  up: async (queryInterface, Sequelize) => {
-    await queryInterface.createTable("Appointments", {
+  up: async (queryInterface, DataTypes) => {
+    await queryInterface.createTable("Appointment", {
       appointment_id: {
         type: DataTypes.UUID,
         defaultValue: DataTypes.UUIDV4,
@@ -22,15 +22,15 @@ module.exports = {
       },
       createdAt: {
         allowNull: false,
-        type: Sequelize.DATE,
+        type: DataTypes.DATE,
       },
       updatedAt: {
         allowNull: false,
-        type: Sequelize.DATE,
+        type: DataTypes.DATE,
       },
     });
   },
-  down: async (queryInterface, Sequelize) => {
-    await queryInterface.dropTable("Appointments");
+  down: async (queryInterface, DataTypes) => {
+    await queryInterface.dropTable("Appointment");
   },
 };

@@ -1,7 +1,7 @@
 "use strict";
 module.exports = {
   up: async (queryInterface, DataTypes) => {
-    await queryInterface.createTable("users", {
+    await queryInterface.createTable("User", {
       email: {
         type: DataTypes.STRING,
         primaryKey: true,
@@ -26,6 +26,6 @@ module.exports = {
     });
   },
   down: async (queryInterface, DataTypes) => {
-    await queryInterface.dropTable("users");
+    await queryInterface.dropTable("User");
   },
 };

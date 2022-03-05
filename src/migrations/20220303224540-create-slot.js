@@ -1,7 +1,7 @@
 "use strict";
 module.exports = {
   up: async (queryInterface, DataTypes) => {
-    await queryInterface.createTable("Slots", {
+    await queryInterface.createTable("Slot", {
       slot_id: {
         type: DataTypes.UUID,
         defaultValue: DataTypes.UUIDV4,
@@ -37,6 +37,6 @@ module.exports = {
     });
   },
   down: async (queryInterface, DataTypes) => {
-    await queryInterface.dropTable("Slots");
+    await queryInterface.dropTable("Slot");
   },
 };
