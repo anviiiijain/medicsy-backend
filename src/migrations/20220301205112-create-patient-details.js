@@ -24,7 +24,7 @@ module.exports = {
         type: DataTypes.DATE,
         allowNull: false,
       },
-      bloodGroup: {
+      blood_group: {
         type: DataTypes.STRING,
         allowNull: false,
       },
@@ -32,7 +32,7 @@ module.exports = {
         type: DataTypes.STRING,
         allowNull: false,
       },
-      emergencyContact: {
+      emergency_contact: {
         type: DataTypes.STRING,
         allowNull: false,
       },

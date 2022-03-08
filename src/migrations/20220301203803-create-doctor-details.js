@@ -28,7 +28,7 @@ module.exports = {
         type: DataTypes.DATE,
         allowNull: false,
       },
-      bloodGroup: {
+      blood_group: {
         type: DataTypes.STRING,
         allowNull: false,
       },
