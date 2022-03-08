@@ -13,9 +13,6 @@ router.post("/register", async (req, res) => {
       password: hashedPassword,
       role,
     });
-    console.log("hashedpassword", hashedPassword);
-    console.log(user);
-
     return res.status(201).send(user);
   } catch (err) {
     console.log(err);
@@ -33,9 +30,8 @@ router.post("/login", async (req, res) => {
   try {
     const matchPass = await bcrypt.compare(password, user.password);
     if (matchPass) {
-      console.log(user.name);
       const accessToken = await jwt.sign(
-        { name: user.name, role: user.role },
+        { email: user.email, role: user.role },
         process.env.SECRET_ACCESS_TOKEN
       );
       res.send({ accessToken: accessToken });
