@@ -168,6 +168,34 @@ router.post(
 //cancel appointment
 
 //get all doctors
+router.get(
+  "/doctors",
+  authenticateToken,
+  checkRole("patient"),
+  async (req, res, next) => {
+    try {
+      const doctorDetails = await DoctorDetails.findAll();
+
+      if (doctorDetails.length <= 0) {
+        res.send({
+          code: 200,
+          message: "No details found",
+          data: [],
+        });
+      }
+
+      res.send({
+        code: 200,
+        data: doctorDetails,
+      });
+    } catch (err) {
+      res.send({
+        code: 400,
+        error: err,
+      });
+    }
+  }
+);
 
 //get single doctor
 
