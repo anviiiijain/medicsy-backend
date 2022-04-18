@@ -1,7 +1,7 @@
 const router = require("express").Router();
 const { uuid } = require("uuidv4");
 const jwt_decode = require("jwt-decode");
-const { PatientDetails, DoctorPatient } = require("./../models");
+const { PatientDetails, DoctorPatient, DoctorSlot } = require("./../models");
 const authenticateToken = require("./../utils/authenticateToken");
 const checkRole = require("./../utils/checkRole");
 
@@ -109,34 +109,57 @@ router.post(
     try {
       const token = req.headers.authorization.split(" ")[1];
       const { email } = jwt_decode(token);
-      const { doctor_id, slot_id, reason } = req.body;
-      if (!doctor_id || !slot_id || !reason) {
-        return res.send({
-          status: true,
-          code: 400,
-          message: "bad request , all details are not available",
-        });
-      } else {
-        const patient = await PatientDetails.findAll({
-          where: {
-            email: email,
-          },
-        });
-        const patient_id = patient[0].patient_id;
-        const doctor_slot = await DoctorSlot.create(doctor_id, slot_id);
+      const { doctor_id, date, start_time, end_time, reason } = req.body;
+      // if (!doctor_id || !date || !start_time || !end_time || !reason) {
+      //   return res.send({
+      //     status: true,
+      //     code: 400,
+      //     message: "bad request , all details are not available",
+      //   });
+      // } else {
+      const patient = await PatientDetails.findAll({
+        where: {
+          email: email,
+        },
+      });
+      const patient_id = patient[0].patient_id;
 
-        const appointment = await Appointment.create({
-          doctor_slot_id: doctor_slot.doctor_slot_id,
+      const doctorPatientDetails = await DoctorPatient.findAll({
+        where: {
+          doctor_id,
           patient_id,
-          reason,
-        });
+        },
+      });
 
-        return res.send({
-          message: "what is this",
-          doctor_slot_id: doctor_slot.doctor_slot_id,
-          appointment_id: appointment.appoint_id,
+      if (doctorPatientDetails.length <= 0) {
+        await DoctorPatient.create({
+          doctor_patient_id: uuid(),
+          doctor_id,
+          patient_id,
         });
       }
+
+      const doctorSlotDetails = await DoctorSlot.findAll({
+        where: {
+          doctor_id,
+        },
+      });
+
+      const doctor_slot_id = doctorSlotDetails[0].doctor_slot_id;
+
+      await Appointment.create({
+        appoint_id: uuid(),
+        doctor_slot_id,
+        patient_id,
+        reason,
+      });
+
+      const doctor_patient = await DoctorPatient.create(doctor_id, patient_id);
+      return res.send({
+        message: "what is this",
+        doctor_patient: doctor_patient,
+      });
+      // }
     } catch (err) {
       return res.send(err);
     }
