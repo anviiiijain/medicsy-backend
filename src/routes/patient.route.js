@@ -154,11 +154,10 @@ router.post(
       });
 
       const doctor_patient = await DoctorPatient.create(doctor_id, patient_id);
+
       return res.send({
-        message: "what is this",
-        doctor_patient: doctor_patient,
+        message: "Appointment booked successfully",
       });
-      // }
     } catch (err) {
       return res.send(err);
     }
@@ -200,6 +199,57 @@ router.get(
 //get single doctor
 
 //write review
+router.get(
+  "/doctors",
+  authenticateToken,
+  checkRole("patient"),
+  async (req, res, next) => {
+    const { rating, title, description } = req.body;
+
+    if (!rating || !title || !description) {
+      res.send({
+        code: 400,
+        message: "Fill in all the fields",
+      });
+    }
+
+    try {
+      const token = req.headers.authorization.split(" ")[1];
+      const { email } = jwt_decode(token);
+      const patient = await PatientDetails.findAll({
+        where: {
+          email: email,
+        },
+      });
+      const patient_id = patient[0].patient_id;
+
+      const doctorPatientDetails = await DoctorPatient.findAll({
+        where: {
+          patient_id,
+        },
+      });
+
+      const doctor_patient_id = doctorPatientDetails[0].doctor_patient_id;
+
+      await DoctorFeedback.create({
+        feedback_id: uuid(),
+        doctor_patient_id,
+        rating,
+        title,
+        description,
+      });
+
+      res.send({
+        message: "Created Successfully",
+      });
+    } catch (err) {
+      res.send({
+        code: 400,
+        error: err,
+      });
+    }
+  }
+);
 
 //see presciption
 
