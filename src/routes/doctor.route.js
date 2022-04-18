@@ -79,7 +79,7 @@ router.post(
       } = req.body;
       const doctor_id = uuid();
       //check if feilds are empty
-      if (!name || !dob || !contact || !blood_group) {
+      if (!name || !dob || !contact || !blood_group || !clinic_id) {
         return res.status(400).send("mandtory fields are empty");
       } else {
         //create doctor details
@@ -110,4 +110,15 @@ router.post(
     }
   }
 );
+
+//create slot
+
+// write prescription
+
+// see patients
+
+//see individual patient
+
+//see appointments
+
 module.exports = router;
