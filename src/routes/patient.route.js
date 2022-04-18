@@ -84,9 +84,8 @@ router.get(
             message: "no slots available",
           });
         } else {
-          await Promise.all{
-            
-          }
+          // await Promise.all{
+          // }
         }
         res.send({
           status: true,
