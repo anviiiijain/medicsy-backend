@@ -1,7 +1,7 @@
 const router = require("express").Router();
 const { uuid } = require("uuidv4");
 const jwt_decode = require("jwt-decode");
-const { PatientDetails, DoctorPatient } = require("./../models");
+const { PatientDetails, DoctorPatient, DoctorSlot } = require("./../models");
 const authenticateToken = require("./../utils/authenticateToken");
 const checkRole = require("./../utils/checkRole");
 
@@ -85,6 +85,37 @@ router.post(
         },
       });
       const patient_id = patient[0].patient_id;
+
+      const doctorPatientDetails = await DoctorPatient.findAll({
+        where: {
+          doctor_id,
+          patient_id,
+        },
+      });
+
+      if (doctorPatientDetails.length <= 0) {
+        await DoctorPatient.create({
+          doctor_patient_id: uuid(),
+          doctor_id,
+          patient_id,
+        });
+      }
+
+      const doctorSlotDetails = await DoctorSlot.findAll({
+        where: {
+          doctor_id,
+        },
+      });
+
+      const doctor_slot_id = doctorSlotDetails[0].doctor_slot_id;
+
+      await Appointment.create({
+        appoint_id: uuid(),
+        doctor_slot_id,
+        patient_id,
+        reason,
+      });
+
       const doctor_patient = await DoctorPatient.create(doctor_id, patient_id);
       return res.send({
         message: "what is this",
